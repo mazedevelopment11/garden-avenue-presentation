@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Garden Avenue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#f6f2ea; --paper:#fbf9f5; --ink:#2a292d; --grey:#6d6e72; --line:#d9d2c4;
+  --gold:#c49a3a; --gold-soft:#e3c98a; --copper:#a4572a; --red:#c8372d; --night:#0d0c0f;
+  --serif:"Cormorant Garamond", Georgia, serif; --sans:"Inter", system-ui, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--night)}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+
+/* fixed 1920x1080 canvas, scaled to fit */
+.frame{position:relative;width:100%;overflow:hidden;background:var(--night)}
+.slide{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden}
+.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.slide.active .kb{animation:kb 14s ease-out both}
+@keyframes kb{from{transform:scale(1.08)}to{transform:scale(1)}}
+.shade-l{position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,7,9,.88) 0%,rgba(8,7,9,.55) 40%,rgba(8,7,9,0) 70%)}
+.shade-b{position:absolute;inset:0;background:linear-gradient(0deg,rgba(8,7,9,.9) 0%,rgba(8,7,9,.35) 38%,rgba(8,7,9,0) 60%)}
+
+/* reveal animation for text */
+.rv{opacity:0;transform:translateY(28px)}
+.slide.active .rv{animation:rv 1s cubic-bezier(.2,.7,.2,1) forwards}
+.slide.active .rv.d1{animation-delay:.15s}.slide.active .rv.d2{animation-delay:.3s}
+.slide.active .rv.d3{animation-delay:.45s}.slide.active .rv.d4{animation-delay:.6s}.slide.active .rv.d5{animation-delay:.75s}
+@keyframes rv{to{opacity:1;transform:none}}
+
+.eyebrow{white-space:nowrap;font:500 22px/1 var(--sans);letter-spacing:.32em;text-transform:uppercase;color:var(--gold)}
+.eyebrow::before{content:"";display:inline-block;width:56px;height:2px;background:var(--gold);vertical-align:middle;margin-right:22px;transform:translateY(-3px)}
+h1,h2{font-family:var(--serif);font-weight:500;letter-spacing:-.01em}
+h2{font-size:112px;line-height:.98}
+.lead{font:300 32px/1.5 var(--sans);color:var(--grey)}
+.light{color:#fff}.light .lead,.lead.light{color:rgba(255,255,255,.78)}
+em.g{font-style:italic;color:var(--gold-soft)}
+
+/* 1 cover */
+.cover{display:grid;grid-template-columns:820px 1fr;background:var(--paper)}
+.cover .left{display:flex;flex-direction:column;justify-content:center;padding:0 110px;position:relative}
+.cover .logo{width:560px;margin-left:-28px;mix-blend-mode:multiply}
+.cover .tag{font:italic 400 46px/1.3 var(--serif);color:var(--grey);margin-top:46px}
+.cover .meta{position:absolute;left:110px;bottom:90px;font:500 18px/1 var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--grey)}
+.cover .meta b{color:var(--gold);font-weight:600}
+.cover .right{position:relative;overflow:hidden}
+.cover .right::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--paper) 0,rgba(251,249,245,0) 14%)}
+
+/* 2 about */
+.about{background:var(--paper);display:grid;grid-template-columns:1fr 760px;gap:0}
+.about .txt{padding:150px 110px 0 130px}
+.about h2{margin:46px 0 40px}
+.about .lead{max-width:860px}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:44px;margin-top:84px;max-width:960px}
+.pillar{border-top:2px solid var(--line);padding-top:26px}
+.pillar .n{font:500 18px/1 var(--sans);color:var(--gold);letter-spacing:.2em}
+.pillar h3{font:500 40px/1.1 var(--serif);margin:16px 0 12px}
+.pillar p{font:300 21px/1.5 var(--sans);color:var(--grey)}
+.about .pic{position:relative;overflow:hidden}
+
+/* text-over-photo slides */
+.over{position:absolute;left:130px;bottom:130px;max-width:980px}
+.over h2{margin:36px 0 30px}
+.over.top{top:130px;bottom:auto}
+
+/* split two photos */
+.duo{display:grid;grid-template-columns:1.25fr 1fr;height:100%;gap:16px;background:var(--night)}
+.duo figure{position:relative;overflow:hidden}
+.duo .cap{position:absolute;left:56px;bottom:52px;color:#fff;font:500 20px/1 var(--sans);letter-spacing:.28em;text-transform:uppercase}
+.duo-head{position:absolute;left:130px;top:110px;z-index:2}
+
+/* brands */
+.brands{background:var(--night);display:grid;grid-template-columns:700px 1fr;height:100%}
+.brands .txt{padding:150px 70px 0 130px;color:#fff}
+.brands h2{margin:44px 0 36px;font-size:100px}
+.chips{display:flex;flex-wrap:wrap;gap:14px;margin-top:60px}
+.chip{border:1px solid rgba(227,201,138,.45);color:var(--gold-soft);font:400 21px/1 var(--sans);padding:15px 24px;border-radius:40px;letter-spacing:.02em}
+.mosaic{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:14px;padding:14px 14px 14px 0}
+.mosaic figure{position:relative;overflow:hidden;border-radius:4px}
+.mosaic figure:first-child{grid-column:1/3}
+.mosaic img{width:100%;height:100%;object-fit:cover;transition:transform 8s ease}
+.slide.active .mosaic img{transform:scale(1.06)}
+
+/* videos */
+.vids{background:var(--night);height:100%;display:grid;grid-template-columns:640px 1fr;align-items:center}
+.vids .txt{padding:0 40px 0 130px;color:#fff}
+.vids h2{margin:40px 0 34px;font-size:100px}
+.phones{display:flex;gap:56px;justify-content:center;align-items:center;height:100%}
+.phone{height:900px;aspect-ratio:9/16;border-radius:34px;overflow:hidden;position:relative;box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.08)}
+.phone video{width:100%;height:100%;object-fit:cover;display:block}
+.phone:nth-child(2){height:780px}
+
+/* section divider */
+.divider{background:var(--copper);color:#fff;display:flex;align-items:center;padding:0 130px;overflow:hidden}
+.divider .big{font:500 520px/0.8 var(--serif);position:absolute;right:60px;bottom:-40px;color:rgba(255,255,255,.1)}
+.divider .eyebrow{color:#fff}.divider .eyebrow::before{background:#fff}
+.divider h2{font-size:150px;margin:44px 0 40px}
+.divider .lead{color:rgba(255,255,255,.85)}
+.divider .area{display:inline-flex;align-items:baseline;gap:18px;margin-top:70px;border-top:2px solid rgba(255,255,255,.4);padding-top:30px}
+.divider .area b{font:500 120px/1 var(--serif)}
+.divider .area span{font:400 28px/1 var(--sans);letter-spacing:.1em}
+
+/* full video */
+.fullvid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.badge{position:absolute;left:130px;top:110px;display:flex;gap:20px;align-items:center;z-index:2}
+.pill{background:var(--red);color:#fff;font:600 19px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;padding:14px 22px;border-radius:3px}
+.pill.ghost{background:rgba(0,0,0,.45);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.3)}
+.fullvid .over h2{font-size:96px}
+.snd{position:absolute;right:120px;bottom:120px;z-index:3;display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);color:#fff;border:1px solid rgba(255,255,255,.3);font:500 18px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;padding:16px 24px;border-radius:40px;cursor:pointer}
+.snd svg{width:22px;height:22px}
+
+/* plan */
+.plan{background:var(--paper);display:grid;grid-template-columns:1fr 620px;height:100%}
+.plan .drawing{padding:110px 40px 100px 110px;display:flex;flex-direction:column}
+.plan .drawing .eyebrow{margin-bottom:34px}
+.plan .drawing h2{font-size:84px;margin-bottom:30px}
+.plan .drawing .imgwrap{flex:1;display:grid;place-items:center;background:#fff;border:1px solid var(--line);border-radius:6px;padding:20px}
+.plan .drawing img{max-width:100%;max-height:560px;mix-blend-mode:multiply}
+.plan .specs{background:var(--ink);color:#fff;padding:110px 90px;display:flex;flex-direction:column}
+.specs .k{font:500 17px/1 var(--sans);letter-spacing:.28em;text-transform:uppercase;color:var(--gold-soft)}
+.specs .area{font:500 150px/1 var(--serif);margin:22px 0 22px}
+.specs .area sup{font-size:60px}
+.specs .unit{font:300 24px/1 var(--sans);color:rgba(255,255,255,.6)}
+.specs dl{margin-top:54px;display:grid;grid-template-columns:1fr auto;row-gap:0}
+.specs dt,.specs dd{padding:20px 0;border-bottom:1px solid rgba(255,255,255,.13);font:300 23px/1 var(--sans)}
+.specs dt{color:rgba(255,255,255,.65)}
+.specs dd{text-align:right;font-weight:500}
+.specs .uses{margin-top:auto;font:italic 400 30px/1.35 var(--serif);color:var(--gold-soft)}
+
+/* closing */
+.close{background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.close .logo{width:620px;mix-blend-mode:multiply}
+.close h2{font-size:88px;margin:60px 0 26px}
+.close .lead{max-width:1000px}
+.close .rule{width:90px;height:2px;background:var(--gold);margin:56px auto 0}
+.close .cta{margin-top:44px;font:500 22px/1 var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--copper)}
+
+/* chrome */
+#bar{position:fixed;left:0;top:0;height:3px;width:0;background:var(--gold);z-index:11}
+.hint{position:absolute;left:110px;bottom:40px;display:flex;align-items:center;gap:14px;font:500 16px/1 var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--grey)}
+.hint i{width:2px;height:46px;background:linear-gradient(var(--gold),transparent);animation:hint 1.8s ease-in-out infinite}
+@keyframes hint{0%{transform:scaleY(.2);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}100%{transform:scaleY(.2);transform-origin:bottom}}
+.cover .meta{bottom:130px}
+</style>
+</head>
+<body>
+
+
+  <!-- 1 Cover -->
+  <section class="slide cover" data-title="Cover">
+    <div class="left">
+      <img class="logo rv" src="media/logo.png" alt="Garden Avenue">
+      <p class="tag rv d2">Where the city comes to live,<br>dine and gather.</p>
+      <div class="meta rv d3">Sulaymaniyah &nbsp;<b>·</b>&nbsp; Residences &amp; Retail</div>
+      <div class="hint rv d4"><i></i>Scroll to explore</div>
+    </div>
+    <div class="right"><img class="bg kb" src="media/towers-dusk.jpg" alt=""></div>
+  </section>
+
+  <!-- 2 What is Garden Avenue -->
+  <section class="slide about" data-title="About">
+    <div class="txt">
+      <div class="eyebrow rv">What is Garden Avenue</div>
+      <h2 class="rv d1">A neighbourhood <br>built around a <em class="g" style="color:var(--gold)">boulevard</em>.</h2>
+      <p class="lead rv d2">Garden Avenue brings modern residential towers and a vibrant ground-floor promenade together in one address — homes above, and a long, landscaped street of cafés, restaurants and shops below.</p>
+      <div class="pillars">
+        <div class="pillar rv d3"><div class="n">01</div><h3>Residences</h3><p>Contemporary apartment blocks with balconies and green terraces.</p></div>
+        <div class="pillar rv d4"><div class="n">02</div><h3>Promenade</h3><p>A continuous retail frontage, lit up from dusk until late.</p></div>
+        <div class="pillar rv d5"><div class="n">03</div><h3>Destination</h3><p>Known brands and a steady crowd of residents and visitors.</p></div>
+      </div>
+    </div>
+    <div class="pic"><img class="bg kb" src="media/block-d.jpg" alt="Garden Avenue Block D"></div>
+  </section>
+
+  <!-- 3 Living above -->
+  <section class="slide" data-title="Residences">
+    <img class="bg kb" src="media/block-d.jpg" alt="">
+    <div class="shade-l"></div>
+    <div class="over light">
+      <div class="eyebrow rv">Residences</div>
+      <h2 class="rv d1">Living above<br>the <em class="g">avenue</em>.</h2>
+      <p class="lead light rv d2">Stone-and-brick towers with private balconies, planted terraces and the Goyzha mountain on the horizon — with everything you need a few steps downstairs.</p>
+    </div>
+  </section>
+
+  <!-- 4 The promenade -->
+  <section class="slide" data-title="Promenade">
+    <div class="duo">
+      <figure><img class="bg kb" src="media/towers-dusk.jpg" alt=""><div class="shade-b"></div><div class="cap">The boulevard at dusk</div></figure>
+      <figure><img class="bg kb" src="media/arabica-row.jpg" alt=""><div class="shade-b"></div><div class="cap">Café row</div></figure>
+    </div>
+    <div class="duo-head light">
+      <div class="eyebrow rv">The Promenade</div>
+      <h2 class="rv d1" style="font-size:96px;margin-top:30px;text-shadow:0 4px 30px rgba(0,0,0,.5)">A street made<br>for <em class="g">lingering</em>.</h2>
+    </div>
+  </section>
+
+  <!-- 5 Brands -->
+  <section class="slide" data-title="Brands">
+    <div class="brands">
+      <div class="txt">
+        <div class="eyebrow rv">Already on the Avenue</div>
+        <h2 class="rv d1">In good<br><em class="g">company</em>.</h2>
+        <p class="lead light rv d2">Established cafés, restaurants and boutiques have already made Garden Avenue their home.</p>
+        <div class="chips rv d3">
+          <span class="chip">N2 Café</span><span class="chip">Arabica Coffee House</span><span class="chip">Acropolis Café &amp; Restaurant</span>
+          <span class="chip">Maccannoli</span><span class="chip">Bloom Café</span><span class="chip">Badrava Sweets</span>
+          <span class="chip">Renova Home</span><span class="chip">O'Hair</span><span class="chip">Holland</span><span class="chip">Joy Town</span>
+        </div>
+      </div>
+      <div class="mosaic">
+        <figure><img src="media/promenade-night.jpg" alt=""></figure>
+        <figure><img src="media/ohair-night.jpg" alt=""></figure>
+        <figure><img src="media/arabica-row.jpg" alt=""></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 After dark -->
+  <section class="slide" data-title="After dark">
+    <img class="bg kb" src="media/n2-night.jpg" alt="">
+    <div class="shade-b"></div>
+    <div class="over light">
+      <div class="eyebrow rv">After Dark</div>
+      <h2 class="rv d1">Busiest when<br>the <em class="g">lights</em> come on.</h2>
+      <p class="lead light rv d2">Full terraces, warm shopfronts and a lively evening crowd — every night of the week.</p>
+    </div>
+  </section>
+
+  <!-- 7 Videos -->
+  <section class="slide" data-title="Life on the Avenue">
+    <div class="vids">
+      <div class="txt">
+        <div class="eyebrow rv">Life on the Avenue</div>
+        <h2 class="rv d1">See it<br><em class="g">in motion</em>.</h2>
+        <p class="lead light rv d2">From the aerial view of the boulevard to the light-canopied walkways — this is the everyday energy of Garden Avenue.</p>
+      </div>
+      <div class="phones">
+        <div class="phone rv d2"><video src="media/walk.mp4" muted loop playsinline preload="auto"></video></div>
+        <div class="phone rv d3"><video src="media/clip.mp4" muted loop playsinline preload="auto"></video></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 Divider: for rent -->
+  <section class="slide divider" data-title="Available for rent">
+    <div class="big">07</div>
+    <div>
+      <div class="eyebrow rv">Opportunity</div>
+      <h2 class="rv d1">Available<br>for Rent.</h2>
+      <p class="lead rv d2">One prime ground-floor unit on Garden Avenue is now open for leasing.</p>
+      <div class="area rv d3"><b>314.8 m²</b><span>SHOP NO. 7</span></div>
+    </div>
+  </section>
+
+  <!-- 9 Rent video -->
+  <section class="slide fullvid" data-title="The space">
+    <video id="rentVid" src="media/rent.mp4" muted loop playsinline preload="auto"></video>
+    <div class="shade-l" style="background:linear-gradient(90deg,rgba(8,7,9,.75) 0%,rgba(8,7,9,.25) 35%,rgba(8,7,9,0) 55%)"></div>
+    <div class="badge rv"><span class="pill">For Rent</span><span class="pill ghost">Shop 7 · 314.8 m²</span></div>
+    <div class="over light">
+      <div class="eyebrow rv d1">The Space</div>
+      <h2 class="rv d2">Your address<br>on the <em class="g">avenue</em>.</h2>
+    </div>
+    <button class="snd" data-vid="rentVid" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path class="w" d="M23 9l-6 6M17 9l6 6"/></svg><span>Sound off</span>
+    </button>
+  </section>
+
+  <!-- 10 Plan + specs -->
+  <section class="slide" data-title="Floor plan">
+    <div class="plan">
+      <div class="drawing">
+        <div class="eyebrow rv">Floor Plan · Shop 7</div>
+        <h2 class="rv d1">An L-shaped unit with<br>a <em class="g" style="color:var(--copper)">25-metre</em> frontage.</h2>
+        <div class="imgwrap rv d2"><img src="media/shop-plan.webp" alt="Shop 7 floor plan, 314.8 square metres"></div>
+      </div>
+      <div class="specs">
+        <div class="k rv">Total area</div>
+        <div class="area rv d1">314.8<sup> m²</sup></div>
+        <div class="unit rv d1">Ground floor · Retail / F&amp;B</div>
+        <dl class="rv d2">
+          <dt>Street frontage</dt><dd>25.35 m</dd>
+          <dt>Rear width</dt><dd>12.39 m</dd>
+          <dt>Main depth</dt><dd>11.50 m + 4.85 m</dd>
+          <dt>Front wing</dt><dd>13.90 × 8.39 m</dd>
+          <dt>Status</dt><dd style="color:var(--gold-soft)">Available now</dd>
+        </dl>
+        <p class="uses rv d3">Ideal for a restaurant, café, flagship store or showroom.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 Closing -->
+  <section class="slide close" data-title="Contact">
+    <img class="logo rv" src="media/logo.png" alt="Garden Avenue">
+    <h2 class="rv d1">Join the avenue.</h2>
+    <p class="lead rv d2">Shop 7 — 314.8 m² of prime ground-floor space, available for rent. Contact the Garden Avenue leasing team to arrange a private viewing.</p>
+    <div class="rule rv d3"></div>
+    <div class="cta rv d3">Book a viewing</div>
+  </section>
+
+<div id="bar"></div>
+
+<script>
+(function(){
+  const slides=[...document.querySelectorAll('.slide')];
+  const frames=slides.map(sl=>{const f=document.createElement('div');f.className='frame';sl.before(f);f.appendChild(sl);return f;});
+  function fit(){
+    const sc=document.documentElement.clientWidth/1920;
+    frames.forEach((f,i)=>{f.style.height=(1080*sc)+'px';slides[i].style.transform='scale('+sc+')';});
+  }
+  addEventListener('resize',fit); fit();
+
+  // reveal animations + play videos while on screen
+  const io=new IntersectionObserver(es=>es.forEach(e=>{
+    const sl=e.target.firstElementChild;
+    if(e.isIntersecting){ sl.classList.add('active'); sl.querySelectorAll('video').forEach(v=>v.play().catch(()=>{})); }
+    else sl.querySelectorAll('video').forEach(v=>v.pause());
+  }),{threshold:.35});
+  frames.forEach(f=>io.observe(f));
+
+  const bar=document.getElementById('bar');
+  addEventListener('scroll',()=>{const h=document.documentElement.scrollHeight-innerHeight;bar.style.width=(h>0?scrollY/h*100:0)+'%';},{passive:true});
+
+  document.querySelectorAll('.snd').forEach(b=>b.addEventListener('click',()=>{
+    const v=document.getElementById(b.dataset.vid); v.muted=!v.muted; if(v.paused) v.play().catch(()=>{});
+    b.querySelector('span').textContent=v.muted?'Sound off':'Sound on';
+    b.querySelector('.w').style.display=v.muted?'':'none';
+  }));
+})();
+</script>
+</body>
+</html>
